@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+ name: myapp
+ namespace: default
+ #labels: # are optional
+spec:
+ type: ClusterIP # it is an internal virtual LB (kube will generate a LB IP dynamically) that can forward the request into pods in backend
+ selector:
+  app: myapp
+ ports:
+  - name: http
+    port: 80 # this is the port we will have to use along with ClusterIP/ServiceIP
+    targetPort: 3000 # is always the port of the applicatioin/service/process inside the cont
