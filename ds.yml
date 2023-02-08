@@ -1,0 +1,20 @@
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+ name: myds
+ namespace: default
+ #labels: # are optional
+spec:
+ template: ## which pods to be created
+  metadata:
+   #name: # kube will generate a random unique name for each pod automatically
+   labels:
+    app: dsapp
+  spec: # what is inside pod
+   containers:
+    - name: cont1
+      image: nginx:latest
+    #- name: cont2
+ selector: # are manadtory # helps the replicaset object to identify the pods it created
+  matchLabels:
+   app: dsapp
