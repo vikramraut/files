@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+ name: myapp
+ namespace: default
+ #labels: # are optional
+spec:
+ type: NodePort # it is going to publish a nodeport/hostport/vmport on every workernode in the cluster & also creates
+   # an internal virtual LB (kube will generate a LB IP dynamically) that can forward the request into podsin backend and
+   # maps the nodport to the clsutrip lb
+ selector:
+  app: myapp
+ ports:
+  - name: http
+    port: 80 # this is the port we will have to use along with ClusterIP/ServiceIP
+    targetPort: 3000 # is always the port of the applicatioin/service/process inside the cont
