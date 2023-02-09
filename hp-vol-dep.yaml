@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+ name: edvol-dep
+ namespace: default
+spec:
+ replicas: 2
+ #minReadySeconds:
+ #strategy:
+ #revisionHistoryLimit: 15
+ selector:
+  matchLabels:
+   app: myapp
+ template:
+  metadata:
+   labels:
+    app: myapp
+  spec: # what is inside pod
+   volumes:
+    - name: edvol # name can be anything
+      emptyDir: {}
+    - name: hpvol
+      hostPath:
+       path: /appconfig ## this is the path on the worker vm/node where the pod will run
+   terminationGracePeriodSeconds: 0 # 0 is forceful delete
+   restartPolicy: Always
+   containers:
+    - name: cont1
+      image: tomcat:latest
+      #env:
+      #resources:
+      volumeMounts:
+       - name: edvol
+         mountPath: /usr/local/tomcat/logs
+    - name: cont2
+      image: nginx:latest
+      volumeMounts:
+       - name: edvol
+         mountPath: /usr/share/nginx/html
+       - name: hpvol
+         mountPath: /var/log/nginx # this is the path inside the cont always
