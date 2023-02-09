@@ -21,7 +21,7 @@ spec:
      containers:
       - name: etcd
         image: lerndevops/samples:etcdctl
-        command: ["sh", "-c", &#39;ETCDCTL_API=3 etcdctl --endpoints=etcdserver:2379 snapshot save "etcd-snapshot-latest-`date +"%d-%m-%Y-%H-%M"`.db"&#39;]
+        command: ["sh", "-c", 'ETCDCTL_API=3 etcdctl --endpoints=etcdserver:2379 snapshot save "etcd-snapshot-latest-`date +"%d-%m-%Y-%H-%M"`.db"']
         volumeMounts:
          - name: hpvol
            mountPath: /opt/etcd-backup
