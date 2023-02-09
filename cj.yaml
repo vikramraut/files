@@ -4,7 +4,7 @@ metadata:
  name: backup-etcd-cornjob
  namespace: default
 spec:
- schedule: &quot;* * * * *&quot;
+ schedule: "* * * * *"
  jobTemplate:
   spec:
    backoffLimit: 4
@@ -21,7 +21,7 @@ spec:
      containers:
       - name: etcd
         image: lerndevops/samples:etcdctl
-        command: [&quot;sh&quot;, &quot;-c&quot;, &#39;ETCDCTL_API=3 etcdctl --endpoints=etcdserver:2379 snapshot save &quot;etcd-snapshot-latest-`date +&quot;%d-%m-%Y-%H-%M&quot;`.db&quot;&#39;]
+        command: ["sh", "-c", &#39;ETCDCTL_API=3 etcdctl --endpoints=etcdserver:2379 snapshot save "etcd-snapshot-latest-`date +"%d-%m-%Y-%H-%M"`.db"&#39;]
         volumeMounts:
          - name: hpvol
            mountPath: /opt/etcd-backup
