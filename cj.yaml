@@ -1,0 +1,27 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+ name: backup-etcd-cornjob
+ namespace: default
+spec:
+ schedule: &quot;* * * * *&quot;
+ jobTemplate:
+  spec:
+   backoffLimit: 4
+   template:
+    metadata:
+     labels:
+      app: etcd1
+    spec:
+     restartPolicy: Never
+     volumes:
+      - name: hpvol
+        hostPath:
+         path: /opt/etcd-backup
+     containers:
+      - name: etcd
+        image: lerndevops/samples:etcdctl
+        command: [&quot;sh&quot;, &quot;-c&quot;, &#39;ETCDCTL_API=3 etcdctl --endpoints=etcdserver:2379 snapshot save &quot;etcd-snapshot-latest-`date +&quot;%d-%m-%Y-%H-%M&quot;`.db&quot;&#39;]
+        volumeMounts:
+         - name: hpvol
+           mountPath: /opt/etcd-backup
