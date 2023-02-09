@@ -1,0 +1,15 @@
+kind: PersistentVolume
+apiVersion: v1 
+metadata:
+  name: nfs-pv
+spec:
+  nfs:
+    server: 54.242.169.89
+    path: /mnt/appdata 
+  #hostPath:
+    #path: /appconfig
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany # only one node can read/write the data -- ReadOnlyMany / ReadWriteMany 
+  persistentVolumeReclaimPolicy: Retain # Delete # what to do with the data inside the volume when the pv object the deleted by kube
