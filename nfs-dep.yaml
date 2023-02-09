@@ -1,15 +1,37 @@
-kind: PersistentVolume
-apiVersion: v1 
+kind: Deployment
+apiVersion: apps/v1
 metadata:
-  name: nfs-pv
+  name: pv-nfsvol-dep
+  namespace: default 
 spec:
-  nfs:
-    server: 54.242.169.89
-    path: /mnt/appdata 
-  #hostPath:
-    #path: /appconfig
-  capacity:
-    storage: 2Gi
-  accessModes:
-    - ReadWriteMany # only one node can read/write the data -- ReadOnlyMany / ReadWriteMany 
-  persistentVolumeReclaimPolicy: Retain # Delete # what to do with the data inside the volume when the pv object the deleted by kube
+  replicas: 2
+  #minReadySeconds:
+  #strategy:
+  #revisionHistoryLimit: 15
+  selector:
+    matchLabels:
+      app: myapp 
+  template:  
+    metadata:
+      labels: 
+        app: myapp 
+    spec:  # what is inside pod 
+      volumes:
+        #- name: edvol  # name can be anything 
+        #  emptyDir: {}
+        #- name: hpvol
+        #  hostPath:
+        #    path: /appconfig  ## this is the path on the worker vm/node where the pod will run
+        - name: nfsvol
+          persistentVolumeClaim: 
+            claimName: myapp-nfs-pvc
+      terminationGracePeriodSeconds: 0 # 0 is forceful delete 
+      restartPolicy: Always
+      containers:
+        - name: cont1 
+          image: nginx:latest
+          #env:
+          #resources:
+          volumeMounts:
+            - name: nfsvol
+              mountPath: /usr/share/nginx/html
