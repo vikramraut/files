@@ -1,0 +1,12 @@
+kind: PersistentVolume
+apiVersion: v1 
+metadata:
+  name: hp-pv
+spec: 
+  hostPath:
+    path: /appconfig
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce # only one node can read/write the data -- ReadOnlyMany / ReadWriteMany 
+  persistentVolumeReclaimPolicy: Retain # Delete # what to do with the data inside the volume when the pv object the deleted by kube
